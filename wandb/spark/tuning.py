@@ -101,9 +101,10 @@ def wandbParallelFitTasks(
           raise Exception("failing")
         run = eva.getWandbRun()
         if isinstance(model, PipelineModel):
+            conf = []
             for stage in model.stages:
                 params = stage.extractParamMap()
-                conf = [(f"{k.parent.split('_')[0]}.{k.name}", v) for k,v in params.items()]
+                conf.extend( [(f"{k.parent.split('_')[0]}.{k.name}", v) for k,v in params.items()] )
         else:
             params = model.extractParamMap()
             conf = [(f"{k.parent.split('_')[0]}.{k.name}", v) for k,v in params.items()]
