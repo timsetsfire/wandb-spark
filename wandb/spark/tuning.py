@@ -100,9 +100,15 @@ def wandbParallelFitTasks(
           print(e)
           raise Exception("failing")
         run = eva.getWandbRun()
-        conf = [(f"{k.parent.split('_')[0]}.{k.name}", v) for k,v in epm[index].items()]
-        conf = dict(conf)
-        run.config.update(conf)
+        if isinstance(model, PipelineModel):
+            for stage in model.stages:
+                params = stage.extractParamMap()
+                conf = [(f"{k.parent.split('_')[0]}.{k.name}", v) for k,v in params.items()]
+                run.config.update(conf)
+        else:
+            params = model.extractParamMap()
+            conf = [(f"{k.parent.split('_')[0]}.{k.name}", v) for k,v in params.items()]
+            run.config.update(conf)           
         metric = eva.evaluate(model.transform(validation, epm[index]))
         wandb.finish()
         return index, metric, model if collectSubModel else None
