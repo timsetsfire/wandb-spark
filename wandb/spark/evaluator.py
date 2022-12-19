@@ -105,7 +105,7 @@ class WandbEvaluator(Evaluator):
     self._set(wandbProjectName=value)
   def setMetricPrefix(self, value: str):
     self._set(metricPrefix=value)
-  def setLabelValues(self, value: list[float]):
+  def setLabelValues(self, value: list):
     self._set(labelValues=value)
     
   def getSparkMlEvaluator(self):
