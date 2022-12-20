@@ -158,8 +158,8 @@ class WandbEvaluator(Evaluator):
       else:
         out = sparkMlEvaluator.evaluate(dataset, {sparkMlEvaluator.metricName: metric} )
         metric_values.append( (f"{metricPrefix}{metric}", out))
-    metric_values.extend( [(k.name, v) for k,v in sparkMlEvaluator.extractParamMap().items() if "metric" not in k.name])
-    run.log( dict(metric_values))
+    metric_values.extend( [(f"{k.parent.split('_')[0]}.{k.name}", v) for k,v in sparkMlEvaluator.extractParamMap().items() if "metric" not in k.name])
+    run.config.update( dict(metric_values))
     return_metric = sparkMlEvaluator.evaluate(dataset)
     dataset.unpersist()
     return return_metric
