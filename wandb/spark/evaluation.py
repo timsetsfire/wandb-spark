@@ -28,7 +28,13 @@ class WandbEvaluator(Evaluator):
   wandbRun: Param[wandb.sdk.wandb_run.Run] = Param(
       Params._dummy(),
       "wandbRun",
-      "wandb run.  Expects an already initialized run"
+      "wandb run.  Expects an already initialized run.  You should set this, or wandbRunKwargs, NOT BOTH"
+  )
+
+  wandbRunKwargs: Param[dict] = Param( 
+      Params._dummy(), 
+      "wandbRunKwargs", 
+      "kwargs to be passed to wandb.init.  You should set this, or wandbRunId, NOT BOTH.  Setting this is useful when using with WandbCrossValdidator"
   )
   
   wandbRunId: Param[str] = Param(
@@ -101,6 +107,10 @@ class WandbEvaluator(Evaluator):
     project_name = self.getWandbProjectName()
     run = wandb.init(project = project_name, id = value, resume = "allow")
     self._set(wandbRun = run)
+  def setWandbRunKwargs(self, value: dict): 
+    self._set(wandbRunKwargs = value)
+    run = wandb.init(**value)
+    self._set(wandbRun = run)
   def setWandbProjectName(self, value: str):
     self._set(wandbProjectName=value)
   def setMetricPrefix(self, value: str):
@@ -112,6 +122,8 @@ class WandbEvaluator(Evaluator):
     return self.getOrDefault(self.sparkMlEvaluator)
   def getWandbRun(self):
     return self.getOrDefault(self.wandbRun)
+  def getWandbRunKwargs(self):
+    return self.getOrDefault(self.wandbRunKwargs)
   def getWandbRunId(self):
     return self.getOrDefault(self.wandbRunId)
   def getWandbProjectName(self):

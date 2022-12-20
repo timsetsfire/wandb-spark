@@ -95,7 +95,8 @@ def wandbParallelFitTasks(
         #  `MetaAlgorithmReadWrite.getAllNestedStages`, make it return
         #  all nested stages and evaluators
         try:
-          eva.setWandbRunId(epm[index][eva.getParam("wandbRunId")])
+        #   eva.setWandbRunId(epm[index][eva.getParam("wandbRunId")])
+            eva.setWandbRunKwargs(epm[index][eva.getParam("wandbRunKwargs")])
         except Exception as e:
           print(e)
           raise Exception("failing")
@@ -110,6 +111,7 @@ def wandbParallelFitTasks(
             conf = [(f"{k.parent.split('_')[0]}.{k.name}", v) for k,v in params.items()]
         conf = dict(conf)
         run.config.update(conf)
+        eva.evaluate(model.transform(train, epm[index]) , {"metricPrefix": "train/"})
         metric = eva.evaluate(model.transform(validation, epm[index]))
         wandb.finish()
         return index, metric, model if collectSubModel else None
