@@ -111,7 +111,8 @@ def wandbParallelFitTasks(
             conf = [(f"{k.parent.split('_')[0]}.{k.name}", v) for k,v in params.items()]
         conf = dict(conf)
         run.config.update(conf)
-        eva.evaluate(model.transform(train, epm[index]) , {"metricPrefix": "train/"})
+        ## need to fix this next line
+        # eva.evaluate(model.transform(train, epm[index]) , {"metricPrefix": "train/"})
         metric = eva.evaluate(model.transform(validation, epm[index]))
         wandb.finish()
         return index, metric, model if collectSubModel else None
