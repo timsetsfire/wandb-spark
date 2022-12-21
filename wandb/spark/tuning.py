@@ -185,6 +185,8 @@ class WandbCrossValidator(CrossValidator):
         else:
             bestIndex = np.argmin(metrics)
         bestModel = est.fit(dataset, epm[bestIndex])
+        ## need to insert something to capture best model based on best index
+        ## with wandb
         return self._copyValues(
             CrossValidatorModel(bestModel, metrics, cast(List[List[Model]], subModels), std_metrics)
         )
