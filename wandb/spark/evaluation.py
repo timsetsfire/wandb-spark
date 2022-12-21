@@ -102,17 +102,17 @@ class WandbEvaluator(Evaluator):
     self._set(wandbRunId=value.id)
     self._set(wandbProjectName=value.project)
     self._set(wandbRun=value)
-  def setWandbRunId(self, value: str):
-    self._set(wandbRunId=value)
-    project_name = self.getWandbProjectName()
-    run = wandb.init(project = project_name, id = value, resume = "allow")
-    self._set(wandbRun = run)
+  # def setWandbRunId(self, value: str):
+  #   self._set(wandbRunId=value)
+  #   project_name = self.getWandbProjectName()
+  #   run = wandb.init(project = project_name, id = value, resume = "allow")
+  #   self._set(wandbRun = run)
   def setWandbRunKwargs(self, value: dict): 
     self._set(wandbRunKwargs = value)
     run = wandb.init(**value)
     self._set(wandbRun = run)
-  def setWandbProjectName(self, value: str):
-    self._set(wandbProjectName=value)
+  # def setWandbProjectName(self, value: str):
+  #   self._set(wandbProjectName=value)
   def setMetricPrefix(self, value: str):
     self._set(metricPrefix=value)
   def setLabelValues(self, value: list):
