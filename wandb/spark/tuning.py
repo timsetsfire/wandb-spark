@@ -189,7 +189,6 @@ class WandbCrossValidator(CrossValidator):
         wandb_kwargs = epm[bestIndex][eva.getParam("wandbRunKwargs")].copy()
         wandb_kwargs["tags"] = ["best"]
         wandb_kwargs["notes"] = "model or pipeline fit on the full dataset with the best hyperparameters found through cross validation"
-        wandb_kwargs["group"] = "best"
         eva.setWandbRunKwargs(wandb_kwargs)
         eva.setMetricPrefix("train")     
         run = eva.getWandbRun()
@@ -197,7 +196,7 @@ class WandbCrossValidator(CrossValidator):
         bestModel = est.fit(dataset, epm[bestIndex])
         if isinstance(bestModel, PipelineModel):
             conf = []
-            for stage in model.stages:
+            for stage in bestModel.stages:
                 params = stage.extractParamMap()
                 conf.extend( [(f"{k.parent.split('_')[0]}.{k.name}", v) for k,v in params.items()] )
         else:
