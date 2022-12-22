@@ -190,7 +190,7 @@ class WandbCrossValidator(CrossValidator):
         wandb_kwargs["tags"] = ["best"]
         wandb_kwargs["notes"] = "model or pipeline fit on the full dataset with the best hyperparameters found through cross validation"
         eva.setWandbRunKwargs(wandb_kwargs)
-        eva.setMetricPrefix("train")     
+        eva.setMetricPrefix("train/")     
         run = eva.getWandbRun()
         self.best_wandb_run_id = run.id
         bestModel = est.fit(dataset, epm[bestIndex])
