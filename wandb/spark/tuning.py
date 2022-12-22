@@ -185,7 +185,7 @@ class WandbCrossValidator(CrossValidator):
         else:
             bestIndex = np.argmin(metrics)
 
-
+        ## tracking for the best model 
         wandb_kwargs = epm[bestIndex][eva.getParam("wandbRunKwargs")].copy()
         wandb_kwargs["tags"] = ["best"]
         wandb_kwargs["notes"] = "model or pipeline fit on the full dataset with the best hyperparameters found through cross validation"
@@ -205,6 +205,7 @@ class WandbCrossValidator(CrossValidator):
         conf = dict(conf)
         run.config.update(conf)       
         eva.evaluate(bestModel.transform(dataset))
+        run.finish() 
         ## need to insert something to capture best model based on best index
         ## with wandb
         return self._copyValues(
