@@ -193,6 +193,7 @@ class WandbCrossValidator(CrossValidator):
         eva.setWandbRunKwargs(wandb_kwargs)
         eva.setMetricPrefix("train")     
         run = eva.getWandbRun()
+        self.best_wandb_run_id = run.id
         bestModel = est.fit(dataset, epm[bestIndex])
         if isinstance(bestModel, PipelineModel):
             conf = []
