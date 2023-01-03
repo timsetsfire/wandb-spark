@@ -20,9 +20,7 @@ def wandb_log_sparkml_model(sparkModelOrPipeline):
     for k,v in m.items():
       model_config[str_stage][k.name] = v
 
-    config = wandb.config
-    wandb.config = dict(**config, **model_config)
-    wandb.run.update()
+    # wandb.config.update(model_config)
 
   with TemporaryDirectory() as tmp_dir:
     sparkModelOrPipeline.write.overwrite().save(f"file:/{tmp_dir.name}")
