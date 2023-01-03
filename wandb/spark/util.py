@@ -1,5 +1,6 @@
 
 from tempfile import TemporaryDirectory
+from pyspark.ml import Pipeline, PipelineModel
 
 def wandb_log_sparkml_model(sparkModelOrPipeline):
   model_config = {}
