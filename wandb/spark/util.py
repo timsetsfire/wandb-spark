@@ -1,7 +1,7 @@
 
+from tempfile import TemporaryDirectory
 
-
-def wandb_log_sparkml_model(sparkModelOrPipeline, path):
+def wandb_log_sparkml_model(sparkModelOrPipeline):
   model_config = {}
   if isinstance(sparkModelOrPipeline, PipelineModel):
     for stage in sparkModelOrPipeline.stages:
@@ -23,7 +23,8 @@ def wandb_log_sparkml_model(sparkModelOrPipeline, path):
     wandb.config = dict(**config, **model_config)
     wandb.run.update()
 
-  sparkModelOrPipeline.write.overwrite().save(path)
-  artifact = wandb.Artifact(name = "spark-pipeline", type = "model", metadata = model_config)
-  artifact.add_dir(path)
-  wandb.log_artifact(artifact)
+  with TemporaryDirectory() as tmp_dir:
+    sparkModelOrPipeline.write.overwrite().save(f"file:/{tmp_dir.name}")
+    artifact = wandb.Artifact(name = f"spark-pipeline-{wandb.run.id}", type = "model", metadata = model_config)
+    artifact.add_dir(tmp_dir.name)
+    wandb.log_artifact(artifact)
