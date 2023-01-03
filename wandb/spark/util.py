@@ -24,7 +24,7 @@ def wandb_log_sparkml_model(sparkModelOrPipeline):
     # wandb.config.update(model_config)
 
   with TemporaryDirectory() as tmp_dir:
-    sparkModelOrPipeline.write().overwrite().save(f"file:///{tmp_dir.name}")
+    sparkModelOrPipeline.write().overwrite().save(f"file:///{tmp_dir}")
     artifact = wandb.Artifact(name = f"spark-pipeline-{wandb.run.id}", type = "model", metadata = model_config)
-    artifact.add_dir(tmp_dir.name)
+    artifact.add_dir(tmp_dir)
     wandb.log_artifact(artifact)
